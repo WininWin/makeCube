@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="csrf-token" content="XYZ123">
+	<title>Simple Image Effect</title>
+
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="./css/dropzone.css">
+
+	<link rel="stylesheet" href="./css/style.css">
+
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div id="app-title" class="col-md-6">
+				
+				<h4>Make your own cube</h4>
+			</div>
+			</div>
+		<div class="row">
+			<div class="container">
+				<div class="row justify-content-center" id="upload-zone">
+					<div class="col-md-8">
+						<form id="upload-image" method="post" class="dropzone" >
+					  <div class="fallback">
+					    <input name="file" type="file" />
+					  </div>
+					</form>
+						<button id="makeCube" type="submit" class="btn btn-success">Make a Cube</button>
+					</div>
+					
+
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			
+			<div class="container-fluid">
+				<div class="row">
+					Gallery
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+<script src="./js/dropzone.js"></script>
+<script src="./js/three.min.js"></script>
+<script>
+	//Dropzone setting
+	Dropzone.autoDiscover = false;
+
+	var myDropzone = new Dropzone("#upload-image", {
+		url: '/upload',
+  paramName: 'file',
+  maxFilesize: 2, // MB
+  maxFiles: 1,
+  dictDefaultMessage: 'Drag an image here to upload, or click to select one',
+  addRemoveLinks : true,
+  headers: {
+    'x-csrf-token': document.querySelectorAll('meta[name=csrf-token]')[0].getAttributeNode('content').value,
+  },
+  acceptedFiles: 'image/*',
+	autoProcessQueue: false,
+	//on upload
+  init: function() {
+    this.on('success', function( file, resp ){
+      console.log( file );
+      console.log( resp );
+    });
+    this.on('thumbnail', function(file) {
+      if ( file.width < 640 || file.height < 480 ) {
+        file.rejectDimensions();
+      }
+      else {
+        file.acceptDimensions();
+      }
+    });
+  },
+  accept: function(file, done) {
+    file.acceptDimensions = done;
+    file.rejectDimensions = function() {
+      done('The image must be at least 640 x 480px')
+    };
+  }
+});
+
+	$('#makeCube').click(function(){           
+	  myDropzone.processQueue();
+	});
+		
+</script>
+
+<script src="./js/script.js"></script>
+</body>
+</html>
