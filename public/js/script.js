@@ -92,11 +92,11 @@
 	function addCube(texture, x, y){
 
 
-      	let texture = new THREE.TextureLoader().load( './imgs/' + texture );
+      	let temptexture = new THREE.TextureLoader().load( './imgs/' + texture );
 
         let geometry = new THREE.CubeGeometry( cubeSize , cubeSize, cubeSize);
 
-        let material = new THREE.MeshBasicMaterial( { map: texture } );
+        let material = new THREE.MeshBasicMaterial( { map: temptexture } );
 		
 		let mtmp = new THREE.Mesh( geometry, material );
         
