@@ -4,7 +4,7 @@
 	Dropzone.autoDiscover = false;
 
 	var myDropzone = new Dropzone("#upload-image", {
-		url: '/upload',
+	  url: '/upload',
 	  paramName: 'file',
 	  maxFilesize: 2, // MB
 	  maxFiles: 1,
@@ -14,30 +14,31 @@
 	    'x-csrf-token': document.querySelectorAll('meta[name=csrf-token]')[0].getAttributeNode('content').value,
 	  },
 	  acceptedFiles: 'image/*',
-	autoProcessQueue: false,
-	//on upload
-  init: function() {
-    this.on('success', function( file, resp ){
+	  autoProcessQueue: false,
+	  
+	  //on upload
+	  init: function() {
+	    this.on('success', function( file, resp ){
 
-    	addCube(resp.filename, currObjectXPosition, currObjectYPosition);
-     	controlObjectPosition();
-     	imgs.push(resp.filename);
-    });
+	    	addCube(resp.filename, currObjectXPosition, currObjectYPosition);
+	     	controlObjectPosition();
+	     	imgs.push(resp.filename);
+	    });
 
-    this.on('error',function(file, resp){
-    	console.log(file);
-    	console.log(resp);
-    });
-    this.on('thumbnail', function(file) {
-     
-        file.acceptDimensions();
-      
-    });
-  },
-  accept: function(file, done) {
-    file.acceptDimensions = done;
-   
-  }
+	    this.on('error',function(file, resp){
+	    	console.log(file);
+	    	console.log(resp);
+	    });
+	    this.on('thumbnail', function(file) {
+	     
+	        file.acceptDimensions();
+	      
+	    });
+	  },
+	  accept: function(file, done) {
+	    file.acceptDimensions = done;
+	   
+	  }
 });
 
 	$('#makeCube').click(function(){           
@@ -59,7 +60,8 @@
 	//init Threejs 
 	init();
 	animate();
-	//Scene update after geting textures 
+
+	//Init cubes
 	fetch('/getimgs')
 	  .then(function(response) {
 	    return response.json();
@@ -90,13 +92,13 @@
 	function addCube(texture, x, y){
 
 
-      	var texture = new THREE.TextureLoader().load( './imgs/' + texture );
+      	let texture = new THREE.TextureLoader().load( './imgs/' + texture );
 
-         var geometry = new THREE.CubeGeometry( cubeSize , cubeSize, cubeSize);
+        let geometry = new THREE.CubeGeometry( cubeSize , cubeSize, cubeSize);
 
-         var material = new THREE.MeshBasicMaterial( { map: texture } );
+        let material = new THREE.MeshBasicMaterial( { map: texture } );
 		
-		var mtmp = new THREE.Mesh( geometry, material );
+		let mtmp = new THREE.Mesh( geometry, material );
         
         mtmp.position.set(x,y,0);
 
@@ -142,30 +144,30 @@
 
 	//update image list every 3 mins
 	setInterval(function(){
-	fetch('/getimgs')
-	  .then(function(response) {
-	    return response.json();
+		fetch('/getimgs')
+		  .then(function(response) {
+		    return response.json();
 
-	  })
-	  .then(function(imglists) {
-	     	if(imglists.length !== imgs.length){
+		  })
+		  .then(function(imglists) {
+		     	if(imglists.length !== imgs.length){
 
-	     		for(let i = 0; i < imglists.length;i++){
-	     			if(imgs.indexOf(imglists[i])=== -1){
-	     				addCube(imglists[i], currObjectXPosition, currObjectYPosition);
-		     			controlObjectPosition();
-		     			imgs.push(imglists[i]);
-	     			}
-		     		
+		     		for(let i = 0; i < imglists.length;i++){
+		     			if(imgs.indexOf(imglists[i])=== -1){
+		     				addCube(imglists[i], currObjectXPosition, currObjectYPosition);
+			     			controlObjectPosition();
+			     			imgs.push(imglists[i]);
+		     			}
+			     		
+			     	}
+
 		     	}
-
-	     	}
-	     
-	     	
-	  })
-	  .catch(function(error){
-	  	console.log(error);
-	  });
+		     
+		     	
+		  })
+		  .catch(function(error){
+		  	console.log(error);
+		  });
 
 	}, 180000);
 	
