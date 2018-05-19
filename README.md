@@ -1,6 +1,6 @@
 # Make your own Cube
 
-Using Three.js, Dropzone.js, nodejs, multer. 
+It is using Three.js, Dropzone.js, nodejs, and multer. 
 You can upload an image as texture of your cube. 
 Upload an image, and then click "Make a Cube" button. Then, you can see the cube with the image that you upload. Use sample.jpg for testing. 
 
