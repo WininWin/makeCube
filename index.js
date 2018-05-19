@@ -1,28 +1,3 @@
-/*
-Project Summary:
-The project is to write a web program in node.js 
-that allows someone to upload an image. 
-Then, we want you to use webgl to create 
-some effect with the image and display 
-this in a webgl (e.g. three.js) window. 
-Someone else can then go to the website and see the image and effect.
-
-Breakdown of Tasks:
-To restate, the program should have the following functionality:
-1) accessible via web interface
-2) implemented at least partially using node.js
-3) user can upload an image
-4) some effect has been done to the image and the result is displayed with webgl
-5) the image is saved so that someone else can see the image by going to the site.
-
-Deliverable:
-1. Run the code on a website that we can access if you can; otherwise, we can run locally.
-2. Send the code as a zip, or a github link
-
-Example:
-A simple example of "some effect" is to 3D rotate the image as an animation. 
-*/
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -44,6 +19,7 @@ app.use(express.static('public/'));
 app.listen(app.get('port'));
 console.log('Server running on port ' + app.get('port'));
 
+//get list of the images
 app.get('/getimgs', function(req, res){
       let imglist = fs.readdirSync('./public/imgs/');
 
@@ -53,8 +29,10 @@ app.get('/getimgs', function(req, res){
 });
 
 
+//upload 
 app.post( '/upload', upload.single( 'file' ), function( req, res, next ) {
 
+  //file check
   if ( !req.file.mimetype.startsWith( 'image/' ) ) {
     let filepath =  __dirname + "/public/imgs/" + req.file.filename;
     fs.unlinkSync(filepath);

@@ -21,6 +21,7 @@
 
     	addCube(resp.filename, currObjectXPosition, currObjectYPosition);
      	controlObjectPosition();
+     	imgs.push(resp.filename);
     });
 
     this.on('error',function(file, resp){
@@ -71,8 +72,12 @@
 	     		addCube(imgs[i], currObjectXPosition, currObjectYPosition);
 	     		controlObjectPosition();
 	     	}
+	  })
+	  .catch(function(error){
+	  	console.log(error);
 	  });
 
+	/* X,Y position of the cube */
 	function controlObjectPosition(){
 		currObjectXPosition += (cubeSize*1.5);
 		if(currObjectXPosition > (window.innerWidth/2)){
@@ -128,10 +133,39 @@
 		requestAnimationFrame( animate );
 		 for (let i = 0; i < meshes.length; i++) {
       
-            meshes[i].rotation.x += 0.005;
-			 meshes[i].rotation.y += 0.01;
+            meshes[i].rotation.x += (Math.random() * 0.03 +0.005);
+			 meshes[i].rotation.y += (Math.random() * 0.03 +0.01);
           }
   
 		renderer.render( scene, camera );
 	}
+
+	//update image list every 3 mins
+	setInterval(function(){
+	fetch('/getimgs')
+	  .then(function(response) {
+	    return response.json();
+
+	  })
+	  .then(function(imglists) {
+	     	if(imglists.length !== imgs.length){
+
+	     		for(let i = 0; i < imglists.length;i++){
+	     			if(imgs.indexOf(imglists[i])=== -1){
+	     				addCube(imglists[i], currObjectXPosition, currObjectYPosition);
+		     			controlObjectPosition();
+		     			imgs.push(imglists[i]);
+	     			}
+		     		
+		     	}
+
+	     	}
+	     
+	     	
+	  })
+	  .catch(function(error){
+	  	console.log(error);
+	  });
+
+	}, 180000);
 	
