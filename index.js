@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
-const sizeOf   =  require( 'image-size' );
+//const sizeOf   =  require( 'image-size' );
 const fs = require('fs');
 require( 'string.prototype.startswith' );
 

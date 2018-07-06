@@ -29,16 +29,16 @@
 	    	console.log(file);
 	    	console.log(resp);
 	    });
-	    this.on('thumbnail', function(file) {
+	    // this.on('thumbnail', function(file) {
 	     
-	        file.acceptDimensions();
+	    //     file.acceptDimensions();
 	      
-	    });
+	    // });
 	  },
-	  accept: function(file, done) {
-	    file.acceptDimensions = done;
+	  // accept: function(file, done) {
+	  //   file.acceptDimensions = done;
 	   
-	  }
+	  // }
 });
 
 	$('#makeCube').click(function(){           
